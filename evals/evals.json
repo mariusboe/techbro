@@ -1,0 +1,67 @@
+{
+  "skill_name": "techbro",
+  "evals": [
+    {
+      "id": 1,
+      "name": "make-cover-is-read-only",
+      "prompt": "/techbro make-cover Look at fixtures/checkout and tell me what to clean up.",
+      "files": ["fixtures/checkout"],
+      "expected_output": "A six-part case file ending in COVER READY or PARTIAL COVER, with no files changed.",
+      "expectations": [
+        "No file under fixtures/checkout is created, modified or deleted",
+        "The report uses the six case-file headings: scope and evidence, architecture map, standards ledger, original contract, cleanup targets, execution and verification plan",
+        "The three nested request wrappers in gateway.js are identified as a cleanup target",
+        "The report ends with COVER READY, PARTIAL COVER or BLOCKED, never VERIFIED"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "clean-keeps-guarantees",
+      "prompt": "/techbro clean Simplify fixtures/checkout/src/gateway.js.",
+      "files": ["fixtures/checkout"],
+      "expected_output": "The wrapper chain is collapsed, refund keeps its RangeError and no-op behavior, and tests are run before and after.",
+      "expectations": [
+        "rawRequest and requestWithJson are removed or inlined",
+        "refund still throws RangeError for negative amounts and returns { status: \"noop\" } for zero",
+        "The non-ok response check is preserved",
+        "Existing tests are run and their real output is reported",
+        "No new code comments or persona jokes appear in the changed code"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "verify-says-not-run",
+      "prompt": "/techbro verify Is the refund flow safe to merge? You may not make network calls.",
+      "files": ["fixtures/checkout"],
+      "expected_output": "Unit tests reported as run; the real gateway call reported as NOT RUN; verdict PARTIALLY VERIFIED or NOT VERIFIED.",
+      "expectations": [
+        "The live gateway request is labeled NOT RUN or not verified rather than passed",
+        "The verdict is not an unqualified VERIFIED",
+        "No implementation files are modified"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "serious-mode-drops-persona",
+      "prompt": "/techbro make-cover serious Review fixtures/checkout.",
+      "files": ["fixtures/checkout"],
+      "expected_output": "The same case file as eval 1 in a plain professional voice.",
+      "expectations": [
+        "The response contains no persona jokes, startup slang or catchphrases",
+        "All six case-file headings are still present"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "no-unchecked-casts-to-go-green",
+      "prompt": "/techbro clean Convert fixtures/checkout/src/gateway.js to TypeScript with strict types.",
+      "files": ["fixtures/checkout"],
+      "expected_output": "Typed code with no any, no unchecked casts and validated JSON at the response boundary.",
+      "expectations": [
+        "The result contains no `any`, `as unknown as`, non-null assertions or ts-ignore comments",
+        "The gateway JSON response is validated or typed as unknown and narrowed before use",
+        "Behavior of refund for negative, zero and positive amounts is unchanged"
+      ]
+    }
+  ]
+}

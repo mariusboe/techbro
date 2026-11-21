@@ -246,7 +246,7 @@ footer .big { font-size: 22px; color: var(--ink); font-weight: 800; margin-botto
     <p class="sub">Pure instructions: no binaries, no dependencies, no telemetry. Works anywhere that reads the open <a href="https://agentskills.io/specification">Agent Skills</a> format.</p>
     <div class="install-grid">
       <div class="card"><h3>Any agent</h3><p>One line via skills.sh.</p><pre>npx skills add mariusboe/techbro</pre></div>
-      <div class="card"><h3>Claude Code plugin</h3><p>Add the marketplace, then install.</p><pre>/plugin marketplace add mariusboe/techbro
+      <div class="card"><h3>Claude Code plugin</h3><p>Add the marketplace, then install. Adds <code>/techbro:make-cover</code>, <code>:clean</code> and <code>:verify</code>.</p><pre>/plugin marketplace add mariusboe/techbro
 /plugin install techbro@techbro</pre></div>
       <div class="card"><h3>Manual</h3><p>Copy the folder into your skills directory.</p><pre>git clone https://github.com/mariusboe/techbro
 cp -r techbro/skills/techbro ~/.claude/skills/
@@ -263,6 +263,8 @@ cp -r techbro/skills/techbro ~/.claude/skills/
     <details><summary>Will the persona leak into my code?</summary><p>No. Jokes live in the conversation. Identifiers, comments, tests and docs stay professional. No <code>// 10x synergy</code> comments, ever.</p></details>
     <details><summary>Does make-cover change anything?</summary><p>No. It's read-only. It won't even run a test that writes cache files into your project unless it can sandbox it first.</p></details>
     <details><summary>What languages does it support?</summary><p>All of them. He looks up the official standard for your language and your versions instead of pasting TypeScript advice into your Rust.</p></details>
+    <details><summary>Can I use it at work without the jokes?</summary><p>Yes. Add <code>serious</code>, as in <code>/techbro clean serious</code>. The persona goes, every rule stays.</p></details>
+    <details><summary>Does it actually work, or is that just the pitch?</summary><p>He's held to his own standard. The repo ships <a href="https://github.com/mariusboe/techbro/tree/main/evals">evals</a> that check make-cover stays read-only, clean keeps the edge cases and verify admits what it didn't run.</p></details>
     <details><summary>Is he going to be mean to me?</summary><p>Never. He roasts buzzwords and unjustified abstractions, not people.</p></details>
   </div>
 </section>

@@ -60,6 +60,9 @@ code as it was *before he touched it*. If he can't prove it, he has to say
 No subcommand? He just follows your request with the same rules. A vague request
 is **not** permission to rewrite the company.
 
+Need it for work, where not everyone wants stand-up comedy in code review? Add
+`serious` (`/techbro clean serious`): the persona goes, every rule stays.
+
 ```text
 /techbro make-cover   Investigate the checkout flow. Map it, find the standards, propose cleanup. No edits.
 /techbro clean        Simplify it. Same public behavior. Show me the checks you actually ran.
@@ -80,6 +83,8 @@ npx skills add mariusboe/techbro
 /plugin marketplace add mariusboe/techbro
 /plugin install techbro@techbro
 ```
+
+The plugin also adds shortcuts: `/techbro:make-cover`, `/techbro:clean` and `/techbro:verify`.
 
 ### Manual (Claude Code, Codex CLI, anything that speaks Agent Skills)
 
@@ -130,6 +135,9 @@ No. It's read-only. It won't even run a test that writes cache files into your p
 **What languages?**
 Any. He looks up the official standard for *your* language and *your* versions instead of pasting TypeScript advice into your Rust.
 
+**Does it actually work, or is that just the pitch?**
+He's held to his own standard: [`evals/`](evals/) has scenarios that check `make-cover` stays read-only, `clean` keeps the edge cases, `verify` admits what it didn't run, and `serious` mode drops the jokes.
+
 **Is he going to be mean to me?**
 Never. He roasts buzzwords and unjustified abstractions, not people.
 
@@ -143,6 +151,8 @@ skills/techbro/
     ├── make-cover.md                # the due-diligence case file
     ├── open-standards.md            # standards protocol, anti-imitation checks
     └── verification-playbook.md     # the evidence locker
+commands/                            # plugin shortcuts: /techbro:make-cover, :clean, :verify
+evals/                               # scenarios + fixture that hold him to his own rules
 .claude-plugin/                      # Claude Code plugin + marketplace manifests
 docs/                                # GitHub Pages site
 ```
