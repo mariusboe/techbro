@@ -157,18 +157,6 @@ evals/                               # scenarios + fixture that hold him to his 
 docs/                                # GitHub Pages site
 ```
 
-## References
-
-[Agent Skills specification](https://agentskills.io/specification) ·
-[Claude Code skills](https://code.claude.com/docs/en/skills) ·
-[EditorConfig](https://editorconfig.org/) ·
-[PEP 8](https://peps.python.org/pep-0008/) ·
-[Python typing spec](https://typing.python.org/en/latest/spec/) ·
-[TypeScript strict](https://www.typescriptlang.org/tsconfig/strict.html) ·
-[Effective Go](https://go.dev/doc/effective_go) ·
-[Rust Style Guide](https://doc.rust-lang.org/style-guide/) ·
-[OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/)
-
 ## License
 
 [MIT](LICENSE). Fork it, ship it, put it in your pitch deck. Just run the tests.
