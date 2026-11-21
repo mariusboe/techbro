@@ -277,6 +277,19 @@ body.shake { animation: shake .45s; }
 @keyframes sparkle { to { transform: translateY(-26px) scale(.2) rotate(90deg); opacity: 0; } }
 .egg { opacity: .55; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+.rot { white-space: nowrap; }
+.hero > div { min-width: 0; }
+.val b { display: inline-block; min-width: 17ch; text-align: center; font-variant-numeric: tabular-nums; }
+.copy { min-width: 9.5em; justify-content: center; }
+.install .copy { min-width: 0; width: 7.4em; padding-left: 6px; padding-right: 6px; }
+.gen .pitch { min-height: 3.4em; }
+.gen .reality { min-height: 3em; }
+.bingo-msg { min-height: 4.4em; display: flex; align-items: center; }
+.bubble { width: 240px; min-height: 64px; display: flex; align-items: center; }
+@media (max-width: 880px) { .bubble { width: 270px; max-width: 100%; height: 76px; align-items: center; display: inline-flex; text-align: center; justify-content: center; } .bubble-slot { height: 96px; display: flex; align-items: flex-end; justify-content: center; } }
+.toast { min-height: 6em; }
+@media (max-width: 600px) { .install { padding-left: 12px; } .install code { font-size: 11.5px; } .install .copy { width: 5.8em; font-size: 13px; margin-left: 6px; } }
 </style>
 </head>
 <body>
@@ -300,7 +313,7 @@ body.shake { animation: shake .45s; }
     </div>
     <div>
       <span class="badge">🚀 NOW IN STEALTH (PUBLICLY)</span>
-      <h1>We're disrupting your <span class="rot" id="rot">codebase</span>.</h1>
+      <h1>We're disrupting your<br><span class="rot" id="rot">codebase</span></h1>
       <p class="after"><s>Trust me, bro.</s> <span class="hand">Actually, don't. Run the tests.</span></p>
       <p class="after">An Agent Skill for Claude Code &amp; Codex. Founder energy in the chat, test-suite discipline in the code.</p>
       <div class="val">Valuation: <b id="val">$4,200,000,000</b> <span>(pre-revenue, pre-code, post-vibes)</span></div>
@@ -310,7 +323,7 @@ body.shake { animation: shake .45s; }
       </div>
     </div>
     <div class="logo-wrap">
-      <div class="bubble" id="bubble">"We can delete that."</div>
+      <div class="bubble-slot"><div class="bubble" id="bubble">"We can delete that."</div></div>
       <img id="mascot" src="logo.png" alt="Techbro: a smug developer in glasses holding a coffee mug. Trust me, bro. Actually, don't. Run the tests." width="900" height="610">
     </div>
   </header>
