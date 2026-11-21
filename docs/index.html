@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Techbro · Trust me, bro. Actually, don't.</title>
-<meta name="description" content="An Agent Skill for Claude Code and Codex: an overconfident founder who cuts your code down to size, then has to prove nothing broke.">
+<title>Techbro · We're disrupting your codebase</title>
+<meta name="description" content="An Agent Skill for Claude Code and Codex: an overconfident founder who wants to delete half your code, and has to prove nothing broke.">
 <meta property="og:title" content="Techbro: Trust me, bro. Actually, don't. Run the tests.">
 <meta property="og:description" content="An Agent Skill with a vest, a cold brew, and a legally binding obligation to run the tests.">
 <meta property="og:image" content="https://mariusboe.github.io/techbro/logo.png">
@@ -13,200 +13,387 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #fbf7f0;
-  --surface: #ffffff;
+  --bg: #fff8e7;
+  --bg2: #ffe9a8;
+  --card: #ffffff;
   --ink: #16130f;
   --muted: #5f574c;
-  --line: #e6ddcf;
-  --accent: #f5c518;
-  --accent-ink: #16130f;
-  --brown: #8a4b2a;
-  --term-bg: #16130f;
-  --term-ink: #efe8dc;
-  --ok: #4fbf74;
-  --warn: #f5c518;
-  --bad: #ef6b5b;
-  --shadow: 0 1px 0 var(--line), 0 12px 32px -18px rgba(22, 19, 15, .35);
+  --yellow: #ffd21f;
+  --pink: #ff8fb1;
+  --blue: #8ecbff;
+  --green: #7be39b;
+  --orange: #ff9d5c;
+  --red: #e5483d;
+  --term: #16130f;
+  --term-ink: #f3ede3;
+  --on-color: #16130f;
+  --shadow: 5px 5px 0 var(--ink);
+  --shadow-sm: 3px 3px 0 var(--ink);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #14120f;
-    --surface: #1d1a16;
+    --bg: #141210;
+    --bg2: #221d12;
+    --card: #1f1b16;
     --ink: #f3ede3;
-    --muted: #b1a796;
-    --line: #322d26;
-    --term-bg: #0c0b09;
-    --shadow: 0 1px 0 var(--line), 0 12px 32px -18px rgba(0, 0, 0, .8);
+    --muted: #b6ab99;
+    --term: #0b0a08;
+    --red: #ff6b5e;
   }
 }
+:root[data-theme="dark"] { --bg: #141210; --bg2: #221d12; --card: #1f1b16; --ink: #f3ede3; --muted: #b6ab99; --term: #0b0a08; --red: #ff6b5e; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font: 18px/1.55 "Bricolage Grotesque", system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-a { color: inherit; text-decoration-color: var(--accent); text-decoration-thickness: 3px; text-underline-offset: 3px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 18px/1.55 "Bricolage Grotesque", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
 code, pre, .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
-nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; font-weight: 600; }
-nav .links { display: flex; gap: 22px; font-size: 16px; }
-nav .links a { text-decoration: none; color: var(--muted); }
-nav .links a:hover { color: var(--ink); }
-.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 20px; }
-.brand img { width: 34px; height: 34px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+.hand { font-family: "Caveat", cursive; font-weight: 700; }
 
-.hero { text-align: center; padding: 40px 0 64px; }
-.hero img.logo { width: min(640px, 100%); height: auto; filter: drop-shadow(0 18px 30px rgba(22,19,15,.18)); }
-.hero h1 { font-size: clamp(32px, 5.4vw, 60px); line-height: 1.04; letter-spacing: -0.02em; margin: 28px auto 14px; max-width: 16ch; font-weight: 800; }
-.hero h1 mark { background: linear-gradient(transparent 58%, var(--accent) 58%); color: inherit; padding: 0 .1em; }
-.hero p.lede { color: var(--muted); font-size: clamp(18px, 2.2vw, 21px); max-width: 40ch; margin: 0 auto 30px; }
+.ticker { background: var(--yellow); color: var(--on-color); border-bottom: 3px solid var(--ink); overflow: hidden; white-space: nowrap; font: 700 13px "JetBrains Mono", monospace; }
+.ticker .track { display: inline-block; padding: 8px 0; animation: tick 40s linear infinite; }
+.ticker span { margin: 0 22px; }
+.up { color: #0a7a33; } .down { color: #b3221a; }
+@keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-.install { display: inline-flex; align-items: center; gap: 4px; background: var(--term-bg); color: var(--term-ink); border-radius: 14px; padding: 6px 6px 6px 18px; box-shadow: var(--shadow); max-width: 100%; }
+nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; gap: 14px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 22px; }
+.brand img { width: 40px; height: 40px; transition: transform .3s; }
+.brand:hover img { transform: rotate(-12deg) scale(1.1); }
+.brew { display: flex; align-items: center; gap: 8px; font: 700 12px "JetBrains Mono", monospace; }
+.brew .bar { width: 90px; height: 14px; border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; background: var(--card); }
+.brew .fill { height: 100%; background: linear-gradient(90deg, #6b3b1f, #a8673d); width: 100%; transition: width .6s; }
+.btn { display: inline-flex; align-items: center; gap: 8px; border: 3px solid var(--ink); background: var(--yellow); color: var(--on-color); font: 800 16px "Bricolage Grotesque", sans-serif; padding: 10px 16px; border-radius: 12px; box-shadow: var(--shadow-sm); text-decoration: none; cursor: pointer; transition: transform .08s, box-shadow .08s; }
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+.btn.white { background: var(--card); color: var(--ink); }
+.btn.pink { background: var(--pink); }
+.btn.green { background: var(--green); }
+
+.hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px; align-items: center; padding: 30px 0 70px; }
+@media (max-width: 880px) { .hero { grid-template-columns: 1fr; text-align: center; } .hero .ctas { justify-content: center; } }
+.badge { display: inline-block; background: var(--pink); color: var(--on-color); border: 3px solid var(--ink); border-radius: 999px; padding: 4px 14px; font: 700 13px "JetBrains Mono", monospace; box-shadow: var(--shadow-sm); transform: rotate(-2deg); }
+.hero h1 { font-size: clamp(40px, 6.4vw, 80px); line-height: 1; letter-spacing: -0.03em; margin: 20px 0 16px; font-weight: 800; }
+.rot { display: inline-block; background: var(--yellow); color: var(--on-color); padding: 0 .15em; border: 3px solid var(--ink); border-radius: .15em; box-shadow: var(--shadow); transform: rotate(-1.5deg); }
+.rot.flip { animation: flip .35s ease; }
+@keyframes flip { 0% { transform: rotate(-1.5deg) rotateX(90deg); } 100% { transform: rotate(-1.5deg) rotateX(0); } }
+.hero .after { font-size: clamp(18px, 2.2vw, 22px); color: var(--muted); margin: 0 0 8px; }
+.hero .after s { text-decoration-thickness: 3px; text-decoration-color: var(--red); }
+.hero .after .hand { font-size: 1.6em; color: var(--red); display: inline-block; transform: rotate(-4deg); }
+.val { font: 700 15px "JetBrains Mono", monospace; margin: 18px 0 24px; }
+.val b { background: var(--green); color: var(--on-color); padding: 2px 8px; border: 2px solid var(--ink); border-radius: 6px; }
+.val span { color: var(--muted); font-weight: 400; }
+.ctas { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; position: relative; }
+.install { display: inline-flex; align-items: center; background: var(--term); color: var(--term-ink); border: 3px solid var(--ink); border-radius: 14px; padding: 5px 5px 5px 16px; box-shadow: var(--shadow); max-width: 100%; }
 .install code { font-size: 15px; white-space: nowrap; overflow-x: auto; }
-.install code::before { content: "$ "; color: var(--accent); }
-.copy { border: 0; background: var(--accent); color: var(--accent-ink); font: 600 14px "Bricolage Grotesque", sans-serif; padding: 10px 14px; border-radius: 10px; cursor: pointer; margin-left: 10px; flex-shrink: 0; }
-.copy:active { transform: translateY(1px); }
-.hero .alt { margin-top: 14px; font-size: 15px; color: var(--muted); }
+.install code::before { content: "$ "; color: var(--yellow); }
+.install .btn { margin-left: 10px; padding: 8px 12px; font-size: 14px; box-shadow: none; border-width: 2px; border-color: var(--yellow); flex-shrink: 0; }
+#trust { position: relative; left: 0; top: 0; transition: left .18s, top .18s; }
+.logo-wrap { position: relative; text-align: center; }
+.logo-wrap img { width: 100%; max-width: 520px; height: auto; animation: float 4s ease-in-out infinite; filter: drop-shadow(8px 10px 0 rgba(22,19,15,.22)); cursor: pointer; }
+@keyframes float { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-12px) rotate(1.5deg); } }
+.bubble { position: absolute; top: -10px; right: 4%; background: var(--card); border: 3px solid var(--ink); border-radius: 18px; padding: 10px 14px; font-weight: 800; font-size: 16px; box-shadow: var(--shadow-sm); max-width: 240px; transform: rotate(3deg); text-align: left; z-index: 2; }
+.bubble::after { content: ""; position: absolute; bottom: -14px; left: 30px; border: 12px solid transparent; border-top-color: var(--ink); border-bottom: 0; }
+@media (max-width: 880px) { .bubble { position: relative; display: inline-block; right: auto; top: auto; margin-bottom: 18px; } }
 
-section { padding: 64px 0; }
-.kicker { font: 600 13px "JetBrains Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--brown); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .kicker { color: var(--accent); } }
-h2 { font-size: clamp(28px, 3.8vw, 42px); line-height: 1.1; letter-spacing: -0.015em; margin: 8px 0 14px; font-weight: 800; }
-.sub { color: var(--muted); max-width: 60ch; margin: 0 0 34px; }
+section { padding: 70px 0; border-top: 3px solid var(--ink); }
+section.alt { background: var(--bg2); }
+.kicker { display: inline-block; font: 700 13px "JetBrains Mono", monospace; letter-spacing: .1em; text-transform: uppercase; background: var(--ink); color: var(--bg); padding: 4px 10px; border-radius: 6px; }
+h2 { font-size: clamp(32px, 4.6vw, 54px); line-height: 1.04; letter-spacing: -0.025em; margin: 14px 0 12px; font-weight: 800; }
+.sub { color: var(--muted); max-width: 62ch; margin: 0 0 34px; }
+.card { background: var(--card); border: 3px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow); padding: 22px; min-width: 0; }
 
-.deck { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
-.slide { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); position: relative; min-height: 230px; display: flex; flex-direction: column; }
-.slide .n { font: 600 12px "JetBrains Mono", monospace; color: var(--muted); }
-.slide h3 { margin: 4px 0 10px; font-size: 22px; }
-.slide .says { font-weight: 600; font-size: 17px; line-height: 1.3; }
-.slide .actually { margin-top: auto; font-size: 15px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px; }
+.gen { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+@media (max-width: 760px) { .gen { grid-template-columns: 1fr; } }
+.gen .pitch { font-size: clamp(24px, 3.4vw, 38px); font-weight: 800; line-height: 1.12; min-height: 2.3em; }
+.gen .reality { margin-top: 12px; font: 15px "JetBrains Mono", monospace; color: var(--muted); }
+.gen .reality b { color: var(--ink); }
+
+.chart-card { display: grid; grid-template-columns: 1.4fr 1fr; gap: 26px; align-items: center; }
+@media (max-width: 860px) { .chart-card { grid-template-columns: 1fr; } }
+.chart-card svg { width: 100%; height: auto; display: block; }
+.chart-card .ax { stroke: var(--ink); stroke-width: 3; }
+.chart-card .grid { stroke: var(--muted); stroke-opacity: .3; stroke-dasharray: 4 6; }
+.chart-card .lbl { fill: var(--muted); font: 13px "JetBrains Mono", monospace; }
+.chart-card .lbl.ci { fill: var(--red); font-weight: 700; }
+.chart-card .conf { fill: none; stroke: var(--red); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+.chart-card .rec { fill: none; stroke: #1f9d55; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+.chart-card .ciline { stroke: var(--red); stroke-width: 2; stroke-dasharray: 6 5; }
+.chart-card.go .conf { animation: draw 2.4s ease forwards; }
+.chart-card.go .rec { animation: draw 2.4s .5s ease forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.legend { display: flex; flex-direction: column; gap: 14px; }
+.legend div { display: flex; gap: 12px; align-items: flex-start; }
+.legend i { width: 26px; height: 8px; border-radius: 4px; flex-shrink: 0; margin-top: 10px; }
+
+.deck { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+.slide { background: var(--card); border: 3px solid var(--ink); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; min-height: 240px; transition: transform .15s; }
+.slide:nth-child(odd) { transform: rotate(-1deg); } .slide:nth-child(even) { transform: rotate(1deg); }
+.slide:hover { transform: rotate(0) translateY(-4px); }
+.slide .n { font: 700 12px "JetBrains Mono", monospace; display: inline-block; padding: 2px 8px; border: 2px solid var(--ink); border-radius: 6px; align-self: flex-start; color: var(--on-color); }
+.slide:nth-child(1) .n { background: var(--pink); } .slide:nth-child(2) .n { background: var(--blue); } .slide:nth-child(3) .n { background: var(--green); } .slide:nth-child(4) .n { background: var(--orange); } .slide:nth-child(5) .n { background: var(--yellow); }
+.slide .says { font-weight: 800; font-size: 20px; line-height: 1.2; margin: 12px 0; }
+.slide .actually { margin-top: auto; font-size: 15px; color: var(--muted); border-top: 2px dashed var(--ink); padding-top: 10px; }
 .slide .actually b { color: var(--ink); }
 
-.cmds { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
-@media (max-width: 860px) { .cmds { grid-template-columns: 1fr; } }
-.cmd { border-left: 4px solid var(--line); padding: 4px 0 4px 18px; margin-bottom: 22px; cursor: pointer; transition: border-color .15s; }
-.cmd:hover, .cmd.active { border-color: var(--accent); }
-.cmd h3 { margin: 0; font-size: 22px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
-.cmd h3 code { font-size: 18px; }
-.cmd .tag { font: 600 11px "JetBrains Mono", monospace; text-transform: uppercase; letter-spacing: .08em; background: var(--accent); color: var(--accent-ink); padding: 3px 7px; border-radius: 6px; }
-.cmd .tag.ro { background: var(--line); color: var(--ink); }
-.cmd q { display: block; font-style: italic; color: var(--muted); margin: 4px 0; quotes: "\201C" "\201D"; }
-.cmd p { margin: 4px 0 0; font-size: 16px; }
+.game { display: grid; grid-template-columns: 1.3fr 1fr; gap: 26px; align-items: start; }
+@media (max-width: 860px) { .game { grid-template-columns: 1fr; } }
+.code { background: var(--term); color: var(--term-ink); border: 3px solid var(--ink); border-radius: 16px; box-shadow: var(--shadow); padding: 14px 0; font: 13.5px/1.5 "JetBrains Mono", monospace; overflow-x: auto; }
+.code .ln { display: flex; gap: 14px; padding: 1px 16px; cursor: pointer; transition: background .15s, opacity .4s, transform .4s, max-height .4s, padding .4s; max-height: 40px; white-space: pre; }
+.code .ln:hover { background: rgba(255, 210, 31, .16); }
+.code .ln .no { color: #6f6759; width: 2ch; text-align: right; flex-shrink: 0; user-select: none; }
+.code .ln.gone { opacity: 0; transform: translateX(60px) rotate(4deg); max-height: 0; padding-top: 0; padding-bottom: 0; overflow: hidden; }
+.code .ln.nope { animation: shake .4s; background: rgba(255, 90, 78, .28); }
+@keyframes shake { 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+.k { color: #ff9d5c; } .f { color: #8ecbff; } .s { color: #7be39b; } .c { color: #8e8576; }
+.score { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+.score .card { padding: 14px; text-align: center; }
+.score b { display: block; font-size: 42px; line-height: 1; }
+.score span { font: 12px "JetBrains Mono", monospace; color: var(--muted); }
+.toast { min-height: 5em; font-weight: 800; font-size: 19px; }
+.toast small { display: block; font: 400 14px "JetBrains Mono", monospace; color: var(--muted); margin-top: 6px; }
 
-.term { background: var(--term-bg); color: var(--term-ink); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; position: sticky; top: 20px; }
-.term .bar { display: flex; gap: 7px; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.07); align-items: center; }
-.term .bar i { width: 11px; height: 11px; border-radius: 50%; background: #3a342c; display: block; }
+.cmds { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; align-items: start; }
+@media (max-width: 860px) { .cmds { grid-template-columns: 1fr; } }
+.cmd { background: var(--card); border: 3px solid var(--ink); border-radius: 16px; padding: 16px 18px; margin-bottom: 16px; cursor: pointer; box-shadow: var(--shadow-sm); transition: transform .1s, box-shadow .1s, background .15s; }
+.cmd:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow); }
+.cmd.active { background: var(--yellow); color: var(--on-color); }
+.cmd.active q, .cmd.active p { color: var(--on-color); }
+.cmd h3 { margin: 0; font-size: 22px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.cmd .tag { font: 700 11px "JetBrains Mono", monospace; text-transform: uppercase; border: 2px solid currentColor; padding: 1px 6px; border-radius: 6px; }
+.cmd q { display: block; font-style: italic; color: var(--muted); margin: 4px 0; }
+.cmd p { margin: 4px 0 0; font-size: 16px; color: var(--muted); }
+.term { background: var(--term); color: var(--term-ink); border: 3px solid var(--ink); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; position: sticky; top: 20px; }
+.term .bar { display: flex; gap: 7px; padding: 12px 14px; border-bottom: 2px solid #2b2620; align-items: center; }
+.term .bar i { width: 12px; height: 12px; border-radius: 50%; display: block; border: 2px solid #000; }
+.term .bar i:nth-child(1) { background: #ff5a4e; } .term .bar i:nth-child(2) { background: var(--yellow); } .term .bar i:nth-child(3) { background: var(--green); }
 .term .bar span { margin-left: 10px; font: 12px "JetBrains Mono", monospace; color: #8e8576; }
-.term pre { margin: 0; padding: 18px 20px 22px; font-size: 13.5px; line-height: 1.65; white-space: pre; overflow-x: auto; min-height: 330px; }
-.term .p { color: var(--accent); }
-.term .bro { color: #f0a77a; }
-.term .dim { color: #8e8576; }
-.term .ok { color: var(--ok); font-weight: 600; }
-.term .warn { color: var(--warn); font-weight: 600; }
-.term .bad { color: var(--bad); font-weight: 600; }
+.term pre { margin: 0; padding: 18px 20px 22px; font-size: 13.5px; line-height: 1.65; white-space: pre; overflow-x: auto; min-height: 340px; }
+.term .p { color: var(--yellow); } .term .bro { color: var(--pink); } .term .dim { color: #8e8576; }
+.term .ok { color: var(--green); font-weight: 700; } .term .warn { color: var(--yellow); font-weight: 700; } .term .bad { color: #ff6b5e; font-weight: 700; }
 .term .note { display: block; padding: 0 20px 14px; font: 12px "JetBrains Mono", monospace; color: #8e8576; }
 
-.terms { counter-reset: t; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px 32px; padding: 0; margin: 0; list-style: none; }
-.terms li { counter-increment: t; display: grid; grid-template-columns: 44px 1fr; gap: 6px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-.terms li::before { content: counter(t, decimal-leading-zero); font: 600 14px "JetBrains Mono", monospace; color: var(--brown); padding-top: 3px; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .terms li::before { color: var(--accent); } }
-.terms b { display: block; }
-.terms span { color: var(--muted); font-size: 16px; }
+.sheet { background: var(--card); border: 3px solid var(--ink); border-radius: 6px; box-shadow: var(--shadow); padding: 34px clamp(18px, 4vw, 48px); position: relative; }
+.sheet h3 { font-size: 26px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: .04em; padding-right: 220px; }
+.sheet .meta { font: 13px "JetBrains Mono", monospace; color: var(--muted); margin-bottom: 18px; }
+.terms { counter-reset: t; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 34px; padding: 0; margin: 0; list-style: none; }
+.terms li { counter-increment: t; padding: 12px 0; border-bottom: 2px dotted var(--muted); }
+.terms li b::before { content: "§" counter(t) "  "; font-family: "JetBrains Mono", monospace; }
+.terms span { display: block; color: var(--muted); font-size: 16px; }
+.stamp { position: absolute; top: 26px; right: 26px; border: 4px solid var(--red); color: var(--red); font: 700 18px "JetBrains Mono", monospace; padding: 6px 12px; border-radius: 8px; transform: rotate(9deg); letter-spacing: .06em; }
+@media (max-width: 700px) { .stamp { position: static; display: inline-block; margin-bottom: 14px; } .sheet h3 { padding-right: 0; } }
+.sign { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 28px; align-items: flex-end; }
+.sign div { min-width: 220px; }
+.sign .hand { font-size: 34px; display: block; border-bottom: 2px solid var(--ink); line-height: 1.1; }
+.sign small { font: 12px "JetBrains Mono", monospace; color: var(--muted); }
+.verdicts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.verdicts code { padding: 6px 10px; border-radius: 8px; border: 2px solid var(--ink); font-size: 13px; font-weight: 700; color: var(--on-color); }
+.verdicts code:nth-child(1) { background: var(--green); } .verdicts code:nth-child(2) { background: var(--yellow); } .verdicts code:nth-child(3) { background: var(--orange); } .verdicts code:nth-child(4) { background: var(--blue); }
+.verdicts code.no { background: var(--card); color: var(--muted); text-decoration: line-through; text-decoration-thickness: 2px; }
 
-.verdicts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
-.verdicts code { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-size: 14px; }
-.verdicts code.no { text-decoration: line-through; color: var(--muted); }
+.bingo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: min(560px, 100%); }
+.bingo button { aspect-ratio: 1; border: 3px solid var(--ink); background: var(--card); color: var(--ink); border-radius: 12px; font: 800 clamp(12px, 1.7vw, 16px) "Bricolage Grotesque", sans-serif; cursor: pointer; box-shadow: var(--shadow-sm); padding: 6px; transition: transform .1s; line-height: 1.1; }
+.bingo button:hover { transform: rotate(-2deg) scale(1.03); }
+.bingo button.on { background: var(--pink); color: var(--on-color); transform: rotate(2deg); }
+.bingo-wrap { display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: center; }
+@media (max-width: 860px) { .bingo-wrap { grid-template-columns: 1fr; } }
+.bingo-msg { font-size: clamp(26px, 3.6vw, 40px); font-weight: 800; line-height: 1.1; }
 
-.install-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); min-width: 0; }
-.card h3 { margin: 0 0 6px; font-size: 20px; }
-.card p { margin: 0 0 14px; color: var(--muted); font-size: 16px; }
-.card pre { background: var(--term-bg); color: var(--term-ink); border-radius: 10px; padding: 14px; margin: 0; font-size: 13px; overflow-x: auto; }
+.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.quote { background: var(--card); border: 3px solid var(--ink); border-radius: 16px; box-shadow: var(--shadow); padding: 20px; }
+.quote:nth-child(2) { transform: rotate(1.2deg); } .quote:nth-child(3) { transform: rotate(-1deg); }
+.quote p { margin: 0 0 14px; font-weight: 600; }
+.quote .who { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+.quote .av { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--ink); display: grid; place-items: center; font-size: 20px; flex-shrink: 0; }
+.react { margin-top: 12px; font: 12px "JetBrains Mono", monospace; color: var(--muted); }
+.disclaimer { margin-top: 22px; font: 12px "JetBrains Mono", monospace; color: var(--muted); }
 
-details { border-bottom: 1px solid var(--line); padding: 16px 0; }
-summary { cursor: pointer; font-weight: 600; font-size: 19px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
-summary::after { content: "+"; font-family: "JetBrains Mono", monospace; color: var(--muted); }
+.install-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.install-grid h3 { margin: 0 0 6px; font-size: 21px; }
+.install-grid p { margin: 0 0 14px; color: var(--muted); font-size: 16px; }
+.install-grid pre { background: var(--term); color: var(--term-ink); border-radius: 10px; padding: 14px; margin: 0 0 12px; font-size: 13px; overflow-x: auto; border: 2px solid var(--ink); }
+
+details { background: var(--card); border: 3px solid var(--ink); border-radius: 14px; box-shadow: var(--shadow-sm); padding: 14px 18px; margin-bottom: 12px; }
+summary { cursor: pointer; font-weight: 800; font-size: 19px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-family: "JetBrains Mono", monospace; }
 details[open] summary::after { content: "−"; }
 details p { margin: 10px 0 0; color: var(--muted); max-width: 70ch; }
 
-footer { padding: 50px 0 70px; text-align: center; color: var(--muted); font-size: 15px; border-top: 1px solid var(--line); margin-top: 30px; }
-footer .big { font-size: 22px; color: var(--ink); font-weight: 800; margin-bottom: 8px; }
+footer { background: var(--ink); color: var(--bg); padding: 60px 0 70px; text-align: center; }
+footer .big { font-size: clamp(28px, 4vw, 46px); font-weight: 800; line-height: 1.05; margin-bottom: 14px; }
+footer .big span { color: #c49a00; }
+footer a { color: inherit; text-decoration-color: var(--yellow); text-decoration-thickness: 2px; }
+footer small { display: block; margin-top: 14px; font: 12px "JetBrains Mono", monospace; opacity: .7; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) footer .big span { color: #8a6a00; } }
+
+.boom { position: fixed; pointer-events: none; font-size: 26px; z-index: 50; animation: boom 1.1s ease-out forwards; }
+@keyframes boom { to { transform: translate(var(--dx), var(--dy)) rotate(var(--r)); opacity: 0; } }
+
 @media (max-width: 600px) {
   body { font-size: 17px; }
-  nav .links { gap: 14px; font-size: 15px; }
-  nav .links a.hide-sm { display: none; }
-  section { padding: 44px 0; }
-  .slide { min-height: 170px; }
-  .term pre { font-size: 12px; }
-  .install { padding-left: 14px; }
-  .install code { font-size: 13px; }
+  .brew { display: none; }
+  section { padding: 50px 0; }
+  .install code { font-size: 12.5px; }
+  .term pre, .code { font-size: 12px; }
+  .slide:nth-child(n), .quote:nth-child(n) { transform: none; }
 }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .chart-card .conf, .chart-card .rec { stroke-dashoffset: 0; }
+}
+
+html { overflow-x: clip; }
+.stickers { position: absolute; inset: 0; pointer-events: none; }
+.stk { position: absolute; pointer-events: auto; cursor: grab; user-select: none; font: 800 15px "Bricolage Grotesque", sans-serif; padding: 6px 12px; border: 3px solid var(--ink); border-radius: 10px; box-shadow: var(--shadow-sm); color: var(--on-color); transition: transform .25s cubic-bezier(.3,1.6,.5,1); white-space: nowrap; }
+.stk:hover { transform: var(--t) scale(1.15) !important; }
+.stk.spin { animation: spin .7s cubic-bezier(.3,1.4,.5,1); }
+@keyframes spin { to { rotate: 360deg; } }
+@media (max-width: 880px) { .stickers { display: none; } }
+.hero { position: relative; }
+.mega { background: var(--ink); color: var(--bg); overflow: hidden; white-space: nowrap; border-top: 3px solid var(--ink); padding: 18px 0; }
+.mega .track { display: inline-block; animation: tick 26s linear infinite; font: 800 clamp(44px, 7vw, 92px)/1 "Bricolage Grotesque", sans-serif; letter-spacing: -0.03em; }
+.mega span { margin: 0 .25em; }
+.mega .o { color: transparent; -webkit-text-stroke: 2px var(--bg); }
+.mega .y { color: var(--yellow); }
+.mega.rev .track { animation-direction: reverse; animation-duration: 32s; }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.3,1.2); }
+.reveal.in { opacity: 1; transform: none; }
+.notif { position: fixed; left: 18px; bottom: 18px; z-index: 40; background: var(--card); border: 3px solid var(--ink); border-radius: 14px; box-shadow: var(--shadow); padding: 12px 40px 12px 14px; display: flex; gap: 12px; align-items: center; max-width: min(360px, calc(100vw - 36px)); font-size: 15px; transform: translateY(160%); transition: transform .45s cubic-bezier(.3,1.5,.5,1); }
+.notif.show { transform: none; }
+.notif .ic { font-size: 26px; }
+.notif small { display: block; color: var(--muted); font: 12px "JetBrains Mono", monospace; }
+.notif button { position: absolute; top: 6px; right: 8px; border: 0; background: none; color: var(--ink); font-size: 18px; cursor: pointer; }
+.verdict-flash { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; pointer-events: none; background: rgba(229, 72, 61, .18); opacity: 0; transition: opacity .2s; }
+.verdict-flash.on { opacity: 1; }
+.verdict-flash div { border: 8px solid var(--red); color: var(--red); background: var(--card); font: 800 clamp(36px, 8vw, 96px)/1 "JetBrains Mono", monospace; padding: 18px 28px; border-radius: 16px; transform: rotate(-8deg) scale(.6); transition: transform .35s cubic-bezier(.3,1.8,.5,1); text-align: center; }
+.verdict-flash.on div { transform: rotate(-8deg) scale(1); }
+.verdict-flash small { display: block; font-size: .25em; margin-top: 10px; }
+body.shake { animation: shake .45s; }
+.spark { position: fixed; pointer-events: none; z-index: 45; color: var(--yellow); font-size: 16px; text-shadow: 0 0 0 var(--ink), 1px 1px 0 var(--ink); animation: sparkle .8s ease-out forwards; }
+@keyframes sparkle { to { transform: translateY(-26px) scale(.2) rotate(90deg); opacity: 0; } }
+.egg { opacity: .55; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
 </style>
 </head>
 <body>
+
+<div class="ticker" aria-hidden="true"><div class="track" id="ticker"></div></div>
+
 <div class="wrap">
   <nav>
     <a class="brand" href="#"><img src="favicon.png" alt="">techbro</a>
-    <div class="links">
-      <a href="#pitch" class="hide-sm">Pitch</a>
-      <a href="#commands">Commands</a>
-      <a href="#install">Install</a>
-      <a href="https://github.com/mariusboe/techbro">GitHub</a>
-    </div>
+    <div class="brew" title="Cold brew remaining"><span>☕ COLD BREW</span><div class="bar"><div class="fill" id="brew"></div></div></div>
+    <a class="btn white" href="https://github.com/mariusboe/techbro">★ GitHub</a>
   </nav>
 
   <header class="hero">
-    <img class="logo" src="logo.png" alt="Techbro: a smug developer in glasses with a coffee mug. Trust me, bro. Actually, don't. Run the tests." width="900" height="610">
-    <h1>He wants to delete half your code. <mark>He has to prove it.</mark></h1>
-    <p class="lede">An Agent Skill for Claude Code, Codex and friends. The confidence of a seed-stage founder, the discipline of a test suite.</p>
-    <div class="install"><code id="cmd">npx skills add mariusboe/techbro</code><button class="copy" data-copy="npx skills add mariusboe/techbro">Copy</button></div>
-    <div class="alt">or <a href="#install">install as a Claude Code plugin</a> · MIT · zero dependencies · the mascot is not a dependency</div>
+    <div class="stickers" id="stickers">
+      <span class="stk" style="left:38%;top:30%;background:var(--green);--t:rotate(-12deg);transform:var(--t)">10x 🚀</span>
+      <span class="stk" style="left:44%;top:-1%;background:var(--blue);--t:rotate(8deg);transform:var(--t)">SERIES A</span>
+      <span class="stk" style="right:-1%;top:62%;background:var(--orange);--t:rotate(-6deg);transform:var(--t)">SHIP IT 🚢</span>
+      <span class="stk" style="left:56%;bottom:2%;background:var(--yellow);--t:rotate(5deg);transform:var(--t)">LGTM?</span>
+      <span class="stk" style="right:6%;top:4%;background:var(--card);color:var(--red);border-color:var(--red);--t:rotate(14deg);transform:var(--t)">NOT VERIFIED</span>
+    </div>
+    <div>
+      <span class="badge">🚀 NOW IN STEALTH (PUBLICLY)</span>
+      <h1>We're disrupting your <span class="rot" id="rot">codebase</span>.</h1>
+      <p class="after"><s>Trust me, bro.</s> <span class="hand">Actually, don't. Run the tests.</span></p>
+      <p class="after">An Agent Skill for Claude Code &amp; Codex. Founder energy in the chat, test-suite discipline in the code.</p>
+      <div class="val">Valuation: <b id="val">$4,200,000,000</b> <span>(pre-revenue, pre-code, post-vibes)</span></div>
+      <div class="ctas">
+        <div class="install"><code>npx skills add mariusboe/techbro</code><button class="btn copy" data-copy="npx skills add mariusboe/techbro">Copy</button></div>
+        <a class="btn pink" id="trust" href="#install">Trust me, bro</a>
+      </div>
+    </div>
+    <div class="logo-wrap">
+      <div class="bubble" id="bubble">"We can delete that."</div>
+      <img id="mascot" src="logo.png" alt="Techbro: a smug developer in glasses holding a coffee mug. Trust me, bro. Actually, don't. Run the tests." width="900" height="610">
+    </div>
   </header>
 </div>
 
-<section id="pitch">
+<div class="mega" aria-hidden="true"><div class="track" id="mega1"></div></div>
+<section class="alt" id="generator">
   <div class="wrap">
-    <div class="kicker">Series A pitch deck</div>
-    <h2>Five slides. Zero vibes.</h2>
-    <p class="sub">Techbro does the talking. The skill makes him do the work. Every claim on the left has to survive the column on the right.</p>
+    <span class="kicker">Pitch generator</span>
+    <h2>Need a pitch? He's got 64.</h2>
+    <p class="sub">Every pitch comes with what the skill actually makes him do. Investors hate this one weird trick.</p>
+    <div class="card gen">
+      <div>
+        <div class="pitch" id="pitch">It's like Uber, but for deleting your wrappers.</div>
+        <div class="reality" id="reality"><b>Reality check:</b> maps every caller first, then deletes one wrapper and runs the tests.</div>
+      </div>
+      <button class="btn" id="gen">🎲 Pitch me</button>
+    </div>
+  </div>
+</section>
+
+<section id="pitch-deck">
+  <div class="wrap">
+    <span class="kicker">Series A deck</span>
+    <h2>The only chart investors need.</h2>
+    <div class="card chart-card" id="chart">
+      <svg viewBox="0 0 560 330" role="img" aria-label="Chart: confidence shoots up, then crashes when CI runs. Receipts grow steadily.">
+        <line class="grid" x1="60" y1="70" x2="540" y2="70"/><line class="grid" x1="60" y1="140" x2="540" y2="140"/><line class="grid" x1="60" y1="210" x2="540" y2="210"/>
+        <line class="ciline" x1="380" y1="30" x2="380" y2="280"/>
+        <text class="lbl ci" x="388" y="48">← CI RUNS</text>
+        <path class="conf" d="M60 260 C 150 255, 220 220, 280 140 S 350 40, 378 34 L 392 250 C 420 252, 470 250, 540 248"/>
+        <path class="rec" d="M60 272 C 160 262, 260 230, 340 190 S 470 120, 540 96"/>
+        <line class="ax" x1="60" y1="280" x2="545" y2="280"/><line class="ax" x1="60" y1="280" x2="60" y2="30"/>
+        <text class="lbl" x="60" y="304">Monday</text><text class="lbl" x="290" y="304">11:00 "ship it"</text><text class="lbl" x="492" y="304">Lunch</text>
+        <text class="lbl" x="-190" y="44" transform="rotate(-90)">Vibes (log scale)</text>
+      </svg>
+      <div class="legend">
+        <div><i style="background:var(--red)"></i><span><b>Confidence.</b> Hockey stick. Absolutely vertical. Briefly the most valuable line on the chart.</span></div>
+        <div><i style="background:#1f9d55"></i><span><b>Receipts.</b> Boring. Up and to the right anyway. This is the line the skill optimizes for.</span></div>
+        <div class="hand" style="font-size:28px;color:var(--red)">"the dip is a feature" – Techbro</div>
+      </div>
+    </div>
+    <div style="height:34px"></div>
     <div class="deck">
-      <div class="slide"><div class="n">01 / Problem</div><div class="says">"Your codebase has more wrappers than a Silicon Valley burrito."</div><div class="actually"><b>Actually:</b> maps real call paths, owners and contracts before touching anything.</div></div>
-      <div class="slide"><div class="n">02 / Solution</div><div class="says">"We can delete that."</div><div class="actually"><b>Actually:</b> smallest complete change. Standard library before new dependencies.</div></div>
-      <div class="slide"><div class="n">03 / Traction</div><div class="says">"Cut 200 lines of tech debt this morning."</div><div class="actually"><b>Actually:</b> kept all 200 edge cases, checked against the pre-edit code.</div></div>
-      <div class="slide"><div class="n">04 / Moat</div><div class="says">"Strong types, bro. Strong."</div><div class="actually"><b>Actually:</b> no convenient <code>any</code>, no unchecked casts, no silenced linters.</div></div>
-      <div class="slide"><div class="n">05 / The Ask</div><div class="says">"Trust me, bro."</div><div class="actually"><b>Actually:</b> absolutely not. Here are the receipts.</div></div>
+      <div class="slide"><span class="n">01 / PROBLEM</span><div class="says">"Your codebase has more wrappers than a Silicon Valley burrito."</div><div class="actually"><b>Actually:</b> maps real call paths, owners and contracts before touching anything.</div></div>
+      <div class="slide"><span class="n">02 / SOLUTION</span><div class="says">"We can delete that."</div><div class="actually"><b>Actually:</b> smallest complete change. Standard library before new dependencies.</div></div>
+      <div class="slide"><span class="n">03 / TRACTION</span><div class="says">"Cut 200 lines of tech debt before standup."</div><div class="actually"><b>Actually:</b> kept all 200 edge cases, checked against the pre-edit code.</div></div>
+      <div class="slide"><span class="n">04 / MOAT</span><div class="says">"Strong types, bro. Strong."</div><div class="actually"><b>Actually:</b> no convenient <code>any</code>, no unchecked casts, no silenced linters.</div></div>
+      <div class="slide"><span class="n">05 / THE ASK</span><div class="says">"Trust me, bro."</div><div class="actually"><b>Actually:</b> absolutely not. Here are the receipts.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="play">
+  <div class="wrap">
+    <span class="kicker">Interactive demo</span>
+    <h2>Go on. Delete some code.</h2>
+    <p class="sub">Click a line to delete it, Techbro-style. Some lines are tech debt. Some are the contract. Guess which ones the skill won't let you touch.</p>
+    <div class="game">
+      <div class="code" id="code"></div>
+      <div>
+        <div class="score">
+          <div class="card"><b id="cut">0</b><span>LINES CUT</span></div>
+          <div class="card"><b id="kept">0</b><span>GUARANTEES DEFENDED</span></div>
+        </div>
+        <div class="card toast" id="toast"></div>
+        <div style="margin-top:14px"><button class="btn white" id="reset">↺ Pivot (reset)</button></div>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="commands">
   <div class="wrap">
-    <div class="kicker">Three commands</div>
+    <span class="kicker">The product</span>
     <h2>Due diligence. Cut. Receipts.</h2>
-    <p class="sub">Arguments to one skill, not three programs. No subcommand? He follows your request with the same rules. A vague request is not permission to rewrite the company.</p>
+    <p class="sub">Arguments to one skill. No subcommand? He follows your request with the same rules. Add <code>serious</code> and the persona logs off; the rules stay.</p>
     <div class="cmds">
       <div>
-        <div class="cmd active" data-t="cover">
-          <h3><code>make-cover</code><span class="tag ro">read-only</span></h3>
-          <q>Due diligence first. No, the README is not the architecture.</q>
-          <p>Maps the architecture, finds the open standards that apply to your versions, documents the original contract and returns a ranked cleanup plan. Touches nothing.</p>
-        </div>
-        <div class="cmd" data-t="clean">
-          <h3><code>clean</code><span class="tag">edits</span></h3>
-          <q>Cut the burn rate, not the error handling.</q>
-          <p>Executes the smallest complete cleanup, then proves behavior didn't change with the same inputs, before and after.</p>
-        </div>
-        <div class="cmd" data-t="verify">
-          <h3><code>verify</code><span class="tag ro">audit</span></h3>
-          <q>The investors want receipts. Your vibes failed CI.</q>
-          <p>Audits your current changes for contract drift, type holes, security regressions and standards violations. Shows the evidence.</p>
-        </div>
+        <div class="cmd active" data-t="cover"><h3><code>make-cover</code><span class="tag">read-only</span></h3><q>Due diligence first. No, the README is not the architecture.</q><p>Maps the architecture, the standards for your versions and the original contract. Ranked cleanup plan. Touches nothing.</p></div>
+        <div class="cmd" data-t="clean"><h3><code>clean</code><span class="tag">edits</span></h3><q>Cut the burn rate, not the error handling.</q><p>Smallest complete cleanup, then the same inputs before and after.</p></div>
+        <div class="cmd" data-t="verify"><h3><code>verify</code><span class="tag">audit</span></h3><q>The investors want receipts. Your vibes failed CI.</q><p>Contract drift, type holes, security regressions, standards violations. With evidence.</p></div>
+        <div class="cmd" data-t="serious"><h3><code>serious</code><span class="tag">for work</span></h3><q>(Techbro has left the chat.)</q><p>Same rigor, plain voice. For teams who want the rules without the stand-up comedy.</p></div>
       </div>
       <div class="term" aria-live="polite">
         <div class="bar"><i></i><i></i><i></i><span id="term-title">~/startup · make-cover</span></div>
@@ -217,146 +404,341 @@ footer .big { font-size: 22px; color: var(--ink); font-weight: 800; margin-botto
   </div>
 </section>
 
-<section id="terms">
+<section class="alt" id="terms">
   <div class="wrap">
-    <div class="kicker">The term sheet</div>
-    <h2>Non-negotiable. Even for a founder.</h2>
-    <p class="sub">The character is the joke. The code is not. Jokes stay in the chat; your code, tests, logs and commit messages stay boringly professional.</p>
-    <ol class="terms">
-      <li><div><b>Due diligence before code</b><span>Request, call sites, tests, config and working-tree status first.</span></div></li>
-      <li><div><b>Open standards, not tribal folklore</b><span>Official guidance for your actual versions, plus the repo's real tooling.</span></div></li>
-      <li><div><b>Don't copy anti-patterns</b><span>Existing code is evidence of intent, not proof of quality.</span></div></li>
-      <li><div><b>Preserve the contract</b><span>Inputs, outputs, errors, ordering, defaults, side effects, security, a11y.</span></div></li>
-      <li><div><b>Cut code, not corners</b><span>No change, then reuse, then stdlib, then local edit, then justified abstraction.</span></div></li>
-      <li><div><b>Types are evidence</b><span>Validate at trust boundaries. Never silence the linter to go green.</span></div></li>
-      <li><div><b>The code doesn't need a narrator</b><span>Near-zero new comments. Names and structure do the explaining.</span></div></li>
-      <li><div><b>No collateral damage</b><span>Never reset, mass-format or stomp on your uncommitted work.</span></div></li>
-      <li><div><b>No imaginary test results</b><span>The baseline is the pre-edit tree, not blindly HEAD. Not run means NOT RUN.</span></div></li>
-    </ol>
-    <div class="verdicts">
-      <code>VERIFIED</code><code>PARTIALLY VERIFIED</code><code>NOT VERIFIED</code><code>BLOCKED</code><code class="no">TRUST_ME_BRO</code>
+    <span class="kicker">Legal</span>
+    <h2>The term sheet. Non-negotiable.</h2>
+    <p class="sub">The character is the joke. The code is not. Jokes stay in the chat; your code, tests, logs and commits stay boringly professional.</p>
+    <div class="sheet">
+      <div class="stamp">NO FAKE RECEIPTS</div>
+      <h3>Term Sheet: Series "Run The Tests"</h3>
+      <div class="meta">Between Techbro ("the Founder") and Your Codebase ("the Business")</div>
+      <ol class="terms">
+        <li><b>Due diligence first</b><span>Request, call sites, tests, config and working tree before any code.</span></li>
+        <li><b>Open standards, not folklore</b><span>Official guidance for your actual versions, plus the repo's real tooling.</span></li>
+        <li><b>No copied anti-patterns</b><span>Existing code is evidence of intent, not proof of quality.</span></li>
+        <li><b>Preserve the contract</b><span>Inputs, outputs, errors, ordering, defaults, side effects, security, a11y.</span></li>
+        <li><b>Cut code, not corners</b><span>No change, then reuse, then stdlib, then local edit, then justified abstraction.</span></li>
+        <li><b>Types are evidence</b><span>Validate at trust boundaries. Never silence the linter to go green.</span></li>
+        <li><b>The code needs no narrator</b><span>Near-zero new comments. Names and structure explain.</span></li>
+        <li><b>No collateral damage</b><span>Never reset, mass-format or stomp on uncommitted work.</span></li>
+        <li><b>No imaginary test results</b><span>Baseline is the pre-edit tree, not blindly HEAD. Not run means NOT RUN.</span></li>
+      </ol>
+      <div class="verdicts"><code>VERIFIED</code><code>PARTIALLY VERIFIED</code><code>NOT VERIFIED</code><code>BLOCKED</code><code class="no">TRUST_ME_BRO</code></div>
+      <div class="sign">
+        <div><span class="hand">Techbro</span><small>The Founder (signed in cold brew)</small></div>
+        <div><span class="hand">&nbsp;</span><small>You, after the tests pass</small></div>
+      </div>
     </div>
   </div>
 </section>
 
+<section id="bingo">
+  <div class="wrap">
+    <span class="kicker">Team building</span>
+    <h2>Techbro buzzword bingo.</h2>
+    <p class="sub">Play along during your next architecture review. Click the squares you've heard this week.</p>
+    <div class="bingo-wrap">
+      <div class="bingo" id="board"></div>
+      <div class="bingo-msg" id="bmsg">No bingo yet. Keep listening to that one guy in the stand-up.</div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="love">
+  <div class="wrap">
+    <span class="kicker">Social proof</span>
+    <h2>What (fictional) people are saying.</h2>
+    <div class="quotes">
+      <div class="quote"><p>"I asked it to rewrite everything in Rust. It asked for the test suite first. I have never felt so seen."</p><div class="who"><span class="av" style="background:var(--blue)">🦀</span>Chad, Chief Vibes Officer, Stealth Startup</div><div class="react">👏 4,201 · 💡 69 · 🚀 1,337</div></div>
+      <div class="quote"><p>"It deleted 300 lines from our checkout. Then it showed me the diff, the tests and the one thing it didn't run. My therapist wants its number."</p><div class="who"><span class="av" style="background:var(--green)">🧘</span>Brayden, Founder &amp; Thought Leader</div><div class="react">👏 812 · 🙏 77</div></div>
+      <div class="quote"><p>"I wrote 'just trust me, it works' in the PR. It replied PARTIALLY VERIFIED. Agree? 👇"</p><div class="who"><span class="av" style="background:var(--pink)">📈</span>Tyler, 10x Engineer (self-appointed)</div><div class="react">👏 9,000 · 💀 404</div></div>
+    </div>
+    <div class="disclaimer">* Testimonials are 100% fabricated, like most testimonials. The skill's verdicts are not.</div>
+  </div>
+</section>
+
+<div class="mega rev" aria-hidden="true"><div class="track" id="mega2"></div></div>
 <section id="install">
   <div class="wrap">
-    <div class="kicker">Onboarding</div>
-    <h2>Install in less time than a stand-up.</h2>
-    <p class="sub">Pure instructions: no binaries, no dependencies, no telemetry. Works anywhere that reads the open <a href="https://agentskills.io/specification">Agent Skills</a> format.</p>
+    <span class="kicker">Onboarding</span>
+    <h2>Install faster than a stand-up.</h2>
+    <p class="sub">Pure instructions: no binaries, no dependencies, no telemetry. The mascot is not a dependency. Works anywhere that reads the open <a href="https://agentskills.io/specification">Agent Skills</a> format.</p>
     <div class="install-grid">
-      <div class="card"><h3>Any agent</h3><p>One line via skills.sh.</p><pre>npx skills add mariusboe/techbro</pre></div>
-      <div class="card"><h3>Claude Code plugin</h3><p>Add the marketplace, then install. Adds <code>/techbro:make-cover</code>, <code>:clean</code> and <code>:verify</code>.</p><pre>/plugin marketplace add mariusboe/techbro
-/plugin install techbro@techbro</pre></div>
-      <div class="card"><h3>Manual</h3><p>Copy the folder into your skills directory.</p><pre>git clone https://github.com/mariusboe/techbro
+      <div class="card"><h3>⚡ Any agent</h3><p>One line via skills.sh.</p><pre>npx skills add mariusboe/techbro</pre><button class="btn copy" data-copy="npx skills add mariusboe/techbro">Copy</button></div>
+      <div class="card"><h3>🧩 Claude Code plugin</h3><p>Adds <code>/techbro:make-cover</code>, <code>:clean</code> and <code>:verify</code>.</p><pre>/plugin marketplace add mariusboe/techbro
+/plugin install techbro@techbro</pre><button class="btn copy" data-copy="/plugin marketplace add mariusboe/techbro">Copy</button></div>
+      <div class="card"><h3>🛠 Manual</h3><p>Copy the folder into your skills directory.</p><pre>git clone https://github.com/mariusboe/techbro
 cp -r techbro/skills/techbro ~/.claude/skills/
-# Codex: ~/.agents/skills/</pre></div>
+# Codex: ~/.agents/skills/</pre><button class="btn copy" data-copy="git clone https://github.com/mariusboe/techbro">Copy</button></div>
     </div>
   </div>
 </section>
 
-<section id="faq">
+<section class="alt" id="faq">
   <div class="wrap">
-    <div class="kicker">Investor Q&amp;A</div>
+    <span class="kicker">Investor Q&amp;A</span>
     <h2>Frequently asked, confidently answered.</h2>
     <details><summary>Will he rewrite my whole codebase?</summary><p>He'll pitch it. Then he'll make the smallest complete change and show you the diff.</p></details>
-    <details><summary>Will the persona leak into my code?</summary><p>No. Jokes live in the conversation. Identifiers, comments, tests and docs stay professional. No <code>// 10x synergy</code> comments, ever.</p></details>
-    <details><summary>Does make-cover change anything?</summary><p>No. It's read-only. It won't even run a test that writes cache files into your project unless it can sandbox it first.</p></details>
-    <details><summary>What languages does it support?</summary><p>All of them. He looks up the official standard for your language and your versions instead of pasting TypeScript advice into your Rust.</p></details>
+    <details><summary>Will the persona leak into my code?</summary><p>No. Jokes live in the conversation. Identifiers, comments, tests and docs stay professional. No <code>// 10x synergy</code> comments. Ever.</p></details>
     <details><summary>Can I use it at work without the jokes?</summary><p>Yes. Add <code>serious</code>, as in <code>/techbro clean serious</code>. The persona goes, every rule stays.</p></details>
+    <details><summary>Does make-cover change anything?</summary><p>No. It's read-only. It won't even run a test that writes cache files into your project unless it can sandbox it first.</p></details>
     <details><summary>Does it actually work, or is that just the pitch?</summary><p>He's held to his own standard. The repo ships <a href="https://github.com/mariusboe/techbro/tree/main/evals">evals</a> that check make-cover stays read-only, clean keeps the edge cases and verify admits what it didn't run.</p></details>
+    <details><summary>What languages?</summary><p>All of them. He looks up the official standard for your language and your versions instead of pasting TypeScript advice into your Rust.</p></details>
     <details><summary>Is he going to be mean to me?</summary><p>Never. He roasts buzzwords and unjustified abstractions, not people.</p></details>
   </div>
 </section>
 
-<div class="wrap">
-  <footer>
-    <div class="big">Trust me, bro. Actually, don't. Run the tests.</div>
-    <div>Made by <a href="https://github.com/mariusboe">@mariusboe</a> · <a href="https://github.com/mariusboe/techbro">Source on GitHub</a> · MIT</div>
-  </footer>
-</div>
+<footer>
+  <div class="wrap">
+    <div class="big">Trust me, bro.<br><span>Actually, don't. Run the tests.</span></div>
+    <div>Built by <a href="https://github.com/mariusboe">@mariusboe</a> · <a href="https://github.com/mariusboe/techbro">Source</a> · MIT</div>
+    <small>No VCs were harmed in the making of this skill. Several buzzwords were.</small>
+    <small class="egg">psst: type "trust me bro" anywhere on this page.</small>
+  </div>
+</footer>
+<div class="notif" id="notif" role="status"><span class="ic" id="nic">🔔</span><div id="ntext"></div><button id="nclose" aria-label="Dismiss">×</button></div>
+<div class="verdict-flash" id="flash" aria-hidden="true"><div>NOT VERIFIED<small>"trust me bro" is not a test result</small></div></div>
 
 <script>
-const scripts = {
-  cover: {
-    title: "~/startup · make-cover",
-    lines: [
-      ['p', '> /techbro make-cover checkout flow'],
-      ['bro', 'Okay. Before I disrupt anything, due diligence.'],
-      ['dim', '  reading git status, tsconfig, eslint, 14 call sites...'],
-      ['', '1. Scope & evidence     src/checkout/**, TS 5.6, strict'],
-      ['', '2. Architecture map     route → service → PaymentGateway'],
-      ['', '3. Standards ledger     TS strict, OWASP ASVS V5'],
-      ['', '4. Original contract    6 behaviors, 2 untested'],
-      ['', '5. Cleanup targets      P0: unchecked webhook cast'],
-      ['', '                        P1: 3 wrappers around one fetch'],
-      ['', '6. Plan                 3 diffs, golden test first'],
-      ['bro', 'Zero files touched. I know. Growth mindset.'],
-      ['ok', 'COVER READY'],
-    ]
-  },
-  clean: {
-    title: "~/startup · clean",
-    lines: [
-      ['p', '> /techbro clean'],
-      ['bro', "Three wrappers around one fetch? That's not architecture, that's a Russian doll."],
-      ['dim', '  snapshot pre-edit tree · golden fixtures captured'],
-      ['', 'Changed   src/checkout/gateway.ts   −61 +18'],
-      ['', '          src/checkout/webhook.ts   parse, not cast'],
-      ['', 'Evidence  tsc --noEmit             PASS'],
-      ['', '          eslint                   PASS'],
-      ['', '          checkout.test.ts 41/41   PASS'],
-      ['', '          golden diff old vs new   identical'],
-      ['bro', "Cut 43 lines. Kept every edge case. Yes, I'm putting it on LinkedIn."],
-      ['ok', 'VERIFIED: public checkout contract unchanged'],
-    ]
-  },
-  verify: {
-    title: "~/startup · verify",
-    lines: [
-      ['p', '> /techbro verify'],
-      ['bro', 'The investors want receipts. Let me see yours.'],
-      ['', 'Changed   2 files, 1 public signature'],
-      ['', 'Evidence  tsc                      PASS'],
-      ['', '          unit tests               PASS'],
-      ['bad', '          refund() now throws on 0  contract drift'],
-      ['', '          e2e payments             NOT RUN (needs sandbox keys)'],
-      ['bro', 'Your vibes passed. Your contract did not.'],
-      ['warn', 'PARTIALLY VERIFIED'],
-    ]
-  }
-};
-const term = document.getElementById('term');
-const title = document.getElementById('term-title');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let timer;
-function esc(s) { return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[c]); }
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[c]);
+
+const tick = [['$LOC', '▼ 43', 'up'], ['$EDGE_CASES', '0 lost', 'up'], ['$VIBES', '▼ 87%', 'down'], ['$TESTS', '▲ 41/41 PASS', 'up'], ['$ANY', '▼ 0', 'up'], ['$WRAPPERS', '▼ 3', 'up'], ['$COLD_BREW', '▼ critically low', 'down'], ['$RECEIPTS', '▲ all-time high', 'up'], ['$TRUST_ME_BRO', 'delisted', 'down'], ['$SYNERGY', 'not a metric', ''], ['$TECH_DEBT', '▼ 12%', 'up'], ['$HYPE', '▲ uncomfortably high', 'down']];
+const tickHtml = tick.map(([s, v, c]) => `<span>${s} <span class="${c}">${v}</span></span>`).join('');
+document.getElementById('ticker').innerHTML = tickHtml + tickHtml;
+
+let brew = 100; const brewEl = document.getElementById('brew');
+setInterval(() => { brew = brew <= 8 ? 100 : brew - 4; brewEl.style.width = brew + '%'; }, 2500);
+
+const words = ['codebase', 'monolith', 'microservices', 'tech debt', 'wrappers', 'utils.js', 'legacy', 'feelings'];
+let wi = 0; const rot = document.getElementById('rot');
+if (!reduce) setInterval(() => { wi = (wi + 1) % words.length; rot.textContent = words[wi]; rot.classList.remove('flip'); void rot.offsetWidth; rot.classList.add('flip'); }, 1900);
+
+let val = 4.2e9; const valEl = document.getElementById('val');
+setInterval(() => { val *= 1 + (Math.random() * 0.03 - 0.008); valEl.textContent = '$' + Math.round(val).toLocaleString('en-US'); }, 900);
+
+const lines = ['"We can delete that."', '"This is a 10x opportunity."', '"Ship it. After the tests."', '"Wrappers are just debt with extra steps."', '"I don\'t do comments. I do names."', '"Receipts or it didn\'t happen."', '"Let\'s circle back after CI."', '"Is this a utils junk drawer? Bold."'];
+const bubble = document.getElementById('bubble');
+document.getElementById('mascot').addEventListener('click', e => { bubble.textContent = pick(lines); burst(e.clientX, e.clientY, ['☕', '🚀', '💸']); });
+setInterval(() => { if (!document.hidden) bubble.textContent = pick(lines); }, 4200);
+
+const trust = document.getElementById('trust'); let dodges = 0;
+trust.addEventListener('mouseenter', () => {
+  if (dodges >= 3 || matchMedia('(hover: none)').matches) return;
+  dodges++;
+  trust.style.left = (Math.random() * 140 - 70) + 'px';
+  trust.style.top = (Math.random() * 50 - 25) + 'px';
+  if (dodges === 3) { trust.textContent = 'OK fine. Run the tests →'; trust.classList.replace('pink', 'green'); }
+});
+
+const pA = ["It's like Uber, but for", "Imagine Airbnb for", "We're building the Tinder of", "Think Stripe, but for", "Blockchain-native", "AI-first, cloud-native", "Basically Notion, but for", "Web3 meets"];
+const pB = ['deleting your wrappers', 'error handling (we removed it)', 'your utils.js junk drawer', 'type assertions', 'microservices that should be a function', 'that one 900-line React component', 'YAML', 'your legacy monolith'];
+const real = ['maps every caller first, then deletes one wrapper and runs the tests.', 'puts it back. Error handling is not tech debt.', 'moves two functions to where they belong. Smaller drawer, nothing burned down.', 'replaces casts with real narrowing. tsc passes, honestly this time.', 'proposes merging them in make-cover. Edits nothing until you say so.', 'extracts one component with the same props. Snapshot tests unchanged.', 'validates it against the schema your CI already uses. No new tool.', 'writes a case file before touching it. COVER READY, zero files changed.'];
+document.getElementById('gen').addEventListener('click', e => {
+  const i = Math.floor(Math.random() * pB.length);
+  document.getElementById('pitch').textContent = `${pick(pA)} ${pB[i]}.`;
+  document.getElementById('reality').innerHTML = `<b>Reality check:</b> ${esc(real[i])}`;
+  burst(e.clientX, e.clientY, ['💸', '🦄', '📈']);
+});
+
+const chart = document.getElementById('chart');
+if ('IntersectionObserver' in window) new IntersectionObserver((es, o) => es.forEach(en => { if (en.isIntersecting) { chart.classList.add('go'); o.disconnect(); } }), { threshold: .35 }).observe(chart);
+else chart.classList.add('go');
+
+const src = [
+  ['debt', '<span class="k">async function</span> <span class="f">rawRequest</span>(url, opts) {'],
+  ['debt', '  <span class="k">return</span> fetch(url, opts);'],
+  ['debt', '}'],
+  ['debt', '<span class="k">async function</span> <span class="f">requestWithJson</span>(url, opts) {'],
+  ['debt', '  <span class="k">return</span> rawRequest(url, opts); <span class="c">// TODO json?</span>'],
+  ['debt', '}'],
+  ['keep', '<span class="k">export async function</span> <span class="f">refund</span>(amount: <span class="k">number</span>) {', "That's the public API. Renaming it breaks every caller.", '§4 Preserve the contract'],
+  ['keep', '  <span class="k">if</span> (amount &lt; 0) <span class="k">throw new</span> RangeError(<span class="s">"amount"</span>);', "That's validation at a trust boundary, bro.", '§6 Types are evidence'],
+  ['keep', '  <span class="k">if</span> (amount === 0) <span class="k">return</span> { status: <span class="s">"noop"</span> };', 'That edge case has a test. And a customer.', '§4 Preserve the contract'],
+  ['debt', '  <span class="k">const</span> res = <span class="k">await</span> requestWithJson(GATEWAY, post(amount));'],
+  ['keep', '  <span class="k">if</span> (!res.ok) <span class="k">throw new</span> GatewayError(res.status);', 'Cut the burn rate, not the error handling.', '§5 Cut code, not corners'],
+  ['debt', '  <span class="k">const</span> data = (<span class="k">await</span> res.json()) <span class="k">as any</span>;'],
+  ['keep', '  <span class="k">return</span> parseRefund(<span class="k">await</span> res.json());', "Parse, don't cast. This line is the moat.", '§6 Types are evidence'],
+  ['keep', '}', "Deleting a closing brace isn't a refactor. It's a lifestyle.", 'Syntax, bro']
+];
+const cheers = ['Nice. One less wrapper. Burn rate down.', 'Deleted. Nobody called that. He checked.', "Gone. That's 10x energy, actually earned.", 'Cut. Tests still green. Investors weeping.', 'Shipped to /dev/null. Contract intact.'];
+const codeEl = document.getElementById('code'), toast = document.getElementById('toast');
+const debtTotal = src.filter(s => s[0] === 'debt').length;
+let cut = 0, kept = 0;
+function updScore() { document.getElementById('cut').textContent = cut; document.getElementById('kept').textContent = kept; }
+function buildCode() {
+  codeEl.innerHTML = ''; cut = 0; kept = 0; updScore();
+  src.forEach(([kind, html, msg, rule], i) => {
+    const d = document.createElement('div'); d.className = 'ln'; d.innerHTML = `<span class="no">${i + 1}</span><span>${html}</span>`;
+    d.addEventListener('click', e => {
+      if (d.classList.contains('gone')) return;
+      if (kind === 'debt') {
+        d.classList.add('gone'); cut++; burst(e.clientX, e.clientY, ['✂️', '🔥']);
+        const left = debtTotal - cut;
+        toast.innerHTML = left ? `${esc(html.includes('as any') ? '`as any`? Deleted with prejudice.' : pick(cheers))}<small>${left} line${left > 1 ? 's' : ''} of debt left.</small>` : `Exit achieved. ${debtTotal} lines gone, 0 guarantees lost.<small>VERIFIED: refund() contract unchanged</small>`;
+        if (!left) burst(innerWidth / 2, innerHeight / 2, ['🎉', '🚀', '💸', '🦄'], 30);
+      } else {
+        d.classList.remove('nope'); void d.offsetWidth; d.classList.add('nope'); kept++;
+        toast.innerHTML = `${esc(msg)}<small>Blocked by term sheet ${esc(rule)}</small>`;
+      }
+      updScore();
+    });
+    codeEl.appendChild(d);
+  });
+  toast.innerHTML = "Pick a line. Any line. He's feeling 10x today.<small>Hint: wrappers are fair game.</small>";
+}
+document.getElementById('reset').addEventListener('click', buildCode);
+buildCode();
+
+const scripts = {
+  cover: { title: '~/startup · make-cover', lines: [
+    ['p', '> /techbro make-cover checkout flow'],
+    ['bro', 'Before I disrupt anything: due diligence.'],
+    ['dim', '  reading git status, tsconfig, eslint, 14 call sites...'],
+    ['', '1. Scope & evidence    src/checkout/**, TS 5.6 strict'],
+    ['', '2. Architecture map    route → service → gateway'],
+    ['', '3. Standards ledger    TS strict, OWASP ASVS V5'],
+    ['', '4. Original contract   6 behaviors, 2 untested'],
+    ['', '5. Cleanup targets     P0 unchecked webhook cast'],
+    ['', '                       P1 3 wrappers, 1 fetch'],
+    ['', '6. Plan                3 diffs, golden test first'],
+    ['bro', 'Zero files touched. Growth mindset.'],
+    ['ok', 'COVER READY'] ] },
+  clean: { title: '~/startup · clean', lines: [
+    ['p', '> /techbro clean'],
+    ['bro', "Three wrappers, one fetch? That's a Russian doll."],
+    ['dim', '  snapshot pre-edit tree · golden fixtures captured'],
+    ['', 'Changed   gateway.ts   −61 +18'],
+    ['', '          webhook.ts   parse, not cast'],
+    ['', 'Evidence  tsc --noEmit            PASS'],
+    ['', '          eslint                  PASS'],
+    ['', '          checkout.test 41/41     PASS'],
+    ['', '          golden old vs new       identical'],
+    ['bro', 'Cut 43 lines. Kept every edge case. LinkedIn post drafted.'],
+    ['ok', 'VERIFIED: public checkout contract unchanged'] ] },
+  verify: { title: '~/startup · verify', lines: [
+    ['p', '> /techbro verify'],
+    ['bro', 'The investors want receipts. Let me see yours.'],
+    ['', 'Changed   2 files, 1 public signature'],
+    ['', 'Evidence  tsc                     PASS'],
+    ['', '          unit tests              PASS'],
+    ['bad', '          refund(0) now throws    contract drift'],
+    ['', '          e2e payments            NOT RUN (sandbox keys)'],
+    ['bro', 'Your vibes passed. Your contract did not.'],
+    ['warn', 'PARTIALLY VERIFIED'] ] },
+  serious: { title: '~/work · verify serious', lines: [
+    ['p', '> /techbro verify serious'],
+    ['', 'Changed   2 files, 1 public signature'],
+    ['', 'Evidence  tsc                     PASS'],
+    ['', '          unit tests              PASS'],
+    ['bad', '          refund(0) now throws    contract drift'],
+    ['', '          e2e payments            NOT RUN (sandbox keys)'],
+    ['', 'Risk      billing/ relies on the zero no-op'],
+    ['warn', 'PARTIALLY VERIFIED'],
+    ['dim', ''],
+    ['dim', '  (no jokes were made in the production of this output)'] ] }
+};
+const term = document.getElementById('term'), title = document.getElementById('term-title'); let timer;
 function render(key) {
-  clearTimeout(timer);
-  const s = scripts[key];
-  title.textContent = s.title;
-  term.innerHTML = '';
-  let i = 0;
+  clearTimeout(timer); const s = scripts[key]; title.textContent = s.title; term.innerHTML = ''; let i = 0;
   const step = () => {
-    if (i >= s.lines.length) return;
-    const [cls, text] = s.lines[i++];
-    const prefix = cls === 'bro' ? '<span class="bro">techbro:</span> ' : '';
-    term.innerHTML += (cls && cls !== 'bro' ? `<span class="${cls}">${esc(text)}</span>` : prefix + esc(text)) + '\n';
-    if (reduce) step(); else timer = setTimeout(step, i === 1 ? 500 : 260);
+    if (i >= s.lines.length) return; const [cls, text] = s.lines[i++];
+    term.innerHTML += (cls === 'bro' ? '<span class="bro">techbro:</span> ' + esc(text) : cls ? `<span class="${cls}">${esc(text)}</span>` : esc(text)) + '\n';
+    if (reduce) step(); else timer = setTimeout(step, i === 1 ? 450 : 240);
   };
   step();
 }
 document.querySelectorAll('.cmd').forEach(el => el.addEventListener('click', () => {
-  document.querySelectorAll('.cmd').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  render(el.dataset.t);
+  document.querySelectorAll('.cmd').forEach(c => c.classList.remove('active')); el.classList.add('active'); render(el.dataset.t);
 }));
 render('cover');
-document.querySelectorAll('.copy').forEach(b => b.addEventListener('click', async () => {
-  try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = 'Copied'; }
-  catch { b.textContent = 'Select it'; }
-  setTimeout(() => b.textContent = 'Copy', 1600);
+
+const bw = ['Synergy', '10x', 'Ship it', 'Disrupt', 'Circle back', 'Move fast', 'Web scale', 'Pivot', 'Rewrite in Rust', 'AI-first', 'Low-hanging fruit', 'Paradigm shift', 'Boil the ocean', 'North star', 'Blockchain?', 'Just a quick refactor'];
+const board = document.getElementById('board'), bmsg = document.getElementById('bmsg');
+const shuffled = bw.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+const winLines = [[0,1,2,3],[4,5,6,7],[8,9,10,11],[12,13,14,15],[0,4,8,12],[1,5,9,13],[2,6,10,14],[3,7,11,15],[0,5,10,15],[3,6,9,12]];
+let won = false;
+shuffled.forEach(w => {
+  const b = document.createElement('button'); b.textContent = w; b.setAttribute('aria-pressed', 'false');
+  b.addEventListener('click', e => {
+    b.classList.toggle('on'); b.setAttribute('aria-pressed', String(b.classList.contains('on')));
+    const on = [...board.children].map(x => x.classList.contains('on'));
+    const hit = winLines.some(l => l.every(i => on[i]));
+    const n = on.filter(Boolean).length;
+    if (hit) { if (!won) burst(e.clientX, e.clientY, ['🎉', '🦄', '🚀', '💸'], 26); won = true; bmsg.innerHTML = 'BINGO! 🎉<br><span style="font-size:.6em;color:var(--muted)">Great. Now run the tests.</span>'; }
+    else { won = false; bmsg.textContent = n ? `${n} buzzword${n > 1 ? 's' : ''} detected. That stand-up was ${n > 5 ? 'basically a pitch deck' : 'mostly fine'}.` : 'No bingo yet. Keep listening to that one guy in the stand-up.'; }
+  });
+  board.appendChild(b);
+});
+
+function burst(x, y, set, n = 12) {
+  if (reduce) return;
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement('span'); s.className = 'boom'; s.textContent = pick(set);
+    s.style.left = x + 'px'; s.style.top = y + 'px';
+    s.style.setProperty('--dx', (Math.random() * 260 - 130) + 'px'); s.style.setProperty('--dy', (Math.random() * -220 - 30) + 'px'); s.style.setProperty('--r', (Math.random() * 360) + 'deg');
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1200);
+  }
+}
+document.querySelectorAll('.copy').forEach(b => b.addEventListener('click', async e => {
+  try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = 'Disrupted ✓'; burst(e.clientX, e.clientY, ['🚀', '💸', '☕']); }
+  catch { b.textContent = 'Select it, bro'; }
+  setTimeout(() => b.textContent = 'Copy', 1800);
 }));
+
+/* mega marquees */
+const m1 = '<span>DELETE</span><span class="y">✦</span><span class="o">VERIFY</span><span class="y">✦</span><span>SHIP</span><span class="y">✦</span><span class="o">REPEAT</span><span class="y">✦</span>';
+const m2 = '<span class="o">NO FAKE RECEIPTS</span><span class="y">✦</span><span>NOT RUN MEANS NOT RUN</span><span class="y">✦</span>';
+document.getElementById('mega1').innerHTML = m1.repeat(4);
+document.getElementById('mega2').innerHTML = m2.repeat(4);
+
+/* hero stickers: parallax + spin */
+const stks = [...document.querySelectorAll('.stk')];
+stks.forEach(s => s.addEventListener('click', e => { s.classList.remove('spin'); void s.offsetWidth; s.classList.add('spin'); burst(e.clientX, e.clientY, ['✦', '⭐']); }));
+const heroEl = document.querySelector('.hero');
+if (!reduce) heroEl.addEventListener('mousemove', e => {
+  const r = heroEl.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+  stks.forEach((s, i) => { const d = (i % 3 + 1) * 10; s.style.translate = `${x * d}px ${y * d}px`; });
+  document.getElementById('mascot').style.rotate = `${x * 6}deg`;
+  if (Math.random() < .25) { const sp = document.createElement('span'); sp.className = 'spark'; sp.textContent = '✦'; sp.style.left = e.clientX + 'px'; sp.style.top = e.clientY + 'px'; document.body.appendChild(sp); setTimeout(() => sp.remove(), 800); }
+});
+
+/* scroll reveal */
+const revealEls = document.querySelectorAll('section h2, .card, .slide, .cmd, .sheet, .quote, details, .bingo');
+if ('IntersectionObserver' in window && !reduce) {
+  revealEls.forEach(el => el.classList.add('reveal'));
+  const ro = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); ro.unobserve(en.target); } }), { threshold: .12 });
+  revealEls.forEach(el => ro.observe(el));
+}
+
+/* fake notifications */
+const notes = [['🔔', 'Chad liked your refactor', 'and 4,200 others · just now'], ['💸', 'A VC wants to "hop on a quick call"', 'about your 43 deleted lines'], ['✅', 'CI passed', 'Techbro is insufferable now'], ['🦄', 'You are now a unicorn', 'valuation: unverified'], ['☕', 'Cold brew low', 'refactor velocity at risk']];
+const notif = document.getElementById('notif'); let ni = 0, nOff = false, nTimer;
+function showNote() {
+  if (nOff || document.hidden) { nTimer = setTimeout(showNote, 12000); return; }
+  const [ic, t, sm] = notes[ni++ % notes.length];
+  document.getElementById('nic').textContent = ic; document.getElementById('ntext').innerHTML = `<b>${esc(t)}</b><small>${esc(sm)}</small>`;
+  notif.classList.add('show'); setTimeout(() => notif.classList.remove('show'), 4800);
+  if (ni < notes.length * 2) nTimer = setTimeout(showNote, 16000);
+}
+document.getElementById('nclose').addEventListener('click', () => { nOff = true; notif.classList.remove('show'); clearTimeout(nTimer); });
+nTimer = setTimeout(showNote, 7000);
+
+/* easter egg: type "trust me bro" */
+let typed = '';
+addEventListener('keydown', e => {
+  if (e.key.length !== 1) return;
+  typed = (typed + e.key.toLowerCase()).replace(/[^a-z]/g, '').slice(-10);
+  if (typed === 'trustmebro') {
+    typed = ''; const f = document.getElementById('flash');
+    f.classList.add('on'); document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake');
+    setTimeout(() => f.classList.remove('on'), 1800);
+  }
+});
+
+console.log('%c techbro %c Looking at the source? Respect. Now run the tests.', 'background:#ffd21f;color:#16130f;font-weight:800;padding:4px 8px;border:2px solid #16130f', 'color:inherit;padding:4px');
 </script>
 </body>
 </html>
