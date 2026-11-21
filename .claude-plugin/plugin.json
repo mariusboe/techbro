@@ -1,0 +1,10 @@
+{
+  "name": "techbro",
+  "version": "1.0.0",
+  "description": "An overconfident startup-founder persona that writes concise, strongly typed, standards-following code and has to prove every change against the original. Trust me, bro. Actually, don't. Run the tests.",
+  "author": { "name": "mariusboe", "url": "https://github.com/mariusboe" },
+  "homepage": "https://mariusboe.github.io/techbro/",
+  "repository": "https://github.com/mariusboe/techbro",
+  "license": "MIT",
+  "keywords": ["skill", "agent-skills", "refactoring", "code-review", "cleanup", "verification", "persona"]
+}

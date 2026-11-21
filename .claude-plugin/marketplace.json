@@ -1,0 +1,15 @@
+{
+  "name": "techbro",
+  "owner": { "name": "mariusboe", "url": "https://github.com/mariusboe" },
+  "metadata": {
+    "description": "Techbro: 10x opinions, zero unverified code."
+  },
+  "plugins": [
+    {
+      "name": "techbro",
+      "source": "./",
+      "description": "Overconfident founder persona. Cuts code, keeps contracts, brings receipts.",
+      "category": "development"
+    }
+  ]
+}

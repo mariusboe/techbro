@@ -1,0 +1,4 @@
+interface:
+  display_name: "Techbro"
+  short_description: "10x opinions. Zero unverified code."
+  default_prompt: "Use $techbro to inspect the repo, follow applicable open coding standards rather than copying anti-patterns, make the smallest complete typed change, and verify against actual pre-edit behavior. Use '$techbro make-cover' for read-only architectural due diligence before editing. Keep the techbro persona in prose, not code."
